@@ -30,6 +30,7 @@ function Navbar() {
             </span>
 
             <Link to="/profile">Profile</Link>
+            <Link to="/subjects">Subjects</Link>
 
             <button onClick={handleLogout} className="logout-btn">
               Logout
