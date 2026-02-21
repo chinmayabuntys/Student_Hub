@@ -1,30 +1,28 @@
-const express=require('express');
-const cors=require('cors')
-const{configDotenv}=require('dotenv');
-const connectDB=require('./dbConnection/db');
-const stdRoute=require('./routes/stdRouter');
+const express = require('express');
+const cors = require('cors');
+const { configDotenv } = require('dotenv');
+
+configDotenv();   // ⭐ move here
+
+const connectDB = require('./dbConnection/db');
+const stdRoute = require('./routes/stdRouter');
 const stdSubRouter = require('./routes/stdSubRouter');
 
 connectDB();
-const app=express();
-app.use(cors())
-configDotenv();
+
+const app = express();
+app.use(cors());
 app.use(express.json());
-console.log('PORT =',process.env.PORT);
 
+app.get('/', (req, res) => {
+  return res.json({ message: 'server is running' });
+});
 
-//server testing api
-app.get('/',(req,res)=>{
-     return res.json({message:'server is running'});
-})  
+app.use('/api/std', stdRoute);
+app.use('/api/subject', stdSubRouter);
 
+const PORT = process.env.PORT || 3000;
 
-//api for std router
-
-app.use('/api/std',stdRoute)
-
-//api for subject router
-app.use('/api/subject',stdSubRouter)
-app.listen( 3000, 'localhost',()=>{
-    console.log('server started at http://localhost:3000')
-})
+app.listen(PORT, () => {
+  console.log(`server started on port ${PORT}`);
+});
