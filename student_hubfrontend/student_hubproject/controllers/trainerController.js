@@ -1,4 +1,5 @@
 const trainerModel=require('../models/trainerModel');
+const stdModel=require('../models/stdModel');
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
 const dotenv=require('dotenv');
@@ -12,6 +13,11 @@ const handleSignup=async(req,res)=>{
             message:"All fields are required"
         })
     }
+    if(process.env.TRAINER_SECRET_CODE !== req.body.trainercode){
+        return res.status(400).json({
+            message:"Invalid secret code"
+        })
+    }
     try {
         const trainer=await trainerModel.findOne({email});
         if(trainer){
@@ -20,8 +26,8 @@ const handleSignup=async(req,res)=>{
             })
         }
         const hashedPass=await bcrypt.hash(password,10);
-        const newTrainer=await trainerModel.insertOne({name,email,password:hashedPass,age,role:'trainer'});
-    
+        await trainerModel.insertOne({name,email,password:hashedPass,age,role:'trainer'});
+        
         return res.status(201).json({
             message:"Trainer registered successfully"
         })
@@ -84,4 +90,16 @@ const getTrainerDetails=async(req,res)=>{
         })
     }
 }
-module.exports={handleSignup,handleLogin,getTrainerDetails};
+const getAllStudents=async(req,res)=>{
+    try {
+        const students=await stdModel.find({},{password:0});
+        return res.status(200).json({
+            students
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message:"Internal server error"
+        })
+    }
+}
+module.exports={handleSignup,handleLogin,getTrainerDetails,getAllStudents};

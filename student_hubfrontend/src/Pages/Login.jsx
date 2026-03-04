@@ -9,7 +9,7 @@ function Login() {
     email: "",
     password: "",
   });
-
+  const [role, setRole] = useState("std");
   const navigate = useNavigate();
 
   function handleChange(e) {
@@ -21,11 +21,12 @@ function Login() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/std/login",
-        user
+        `http://localhost:3000/api/${role}/login`,
+        user,
       );
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", role);
       toast.success(res.data.message);
       navigate("/profile");
     } catch (error) {
@@ -36,7 +37,13 @@ function Login() {
   return (
     <div className="login-container">
       <form className="login-card" onSubmit={handleSubmit}>
-        <h2 style={{textAlign:"center"}}>Welcome Back</h2>
+        <h2 style={{ textAlign: "center" }}>Welcome Back</h2>
+        <button type="button" style={{ backgroundColor: '#48de98' }} onClick={() => setRole("std")}>
+          Student
+        </button>
+        <button type="button" style={{ backgroundColor: "#F8D0FE" }} onClick={() => setRole("trainer")}>
+          Trainer
+        </button>
 
         <input
           type="email"
@@ -54,11 +61,19 @@ function Login() {
           onChange={handleChange}
         />
 
-        <button type="submit">Login</button>
+        <button
+          type="submit"
+          style={
+            role === "std"
+              ? { backgroundColor: "#48de98" }
+              : { backgroundColor: "#F8D0FE" }
+          }
+        >
+          Login as {role === "std" ? "Student" : "Trainer"}
+        </button>
 
         <p className="login-footer">
-          Don't have an account?{" "}
-          <Link to="/signup">Signup</Link>
+          Don't have an account? <Link to="/signup">Signup</Link>
         </p>
       </form>
     </div>
