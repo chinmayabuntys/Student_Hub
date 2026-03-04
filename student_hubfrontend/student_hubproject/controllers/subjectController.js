@@ -76,4 +76,15 @@ const handleDeleteSubject=async(req,res)=>{
     }
     return res.status(200).json({message:'Subject deleted successfully'})
 }
-module.exports={handleAddSubject,handlegetAllSubjects,handleDeleteSubject}
+
+const handleupdatesubject=async(req,res)=>{
+    const{editId,subject}=req.body;
+    
+    if(!editId || !subject){
+        return res.status(400).json({message:'Subject id and new subject name are required'})
+    }
+    await subjectModel.findOneAndUpdate({_id:editId},{$set:{subject:subject.trim().toLowerCase()}})
+    return res.status(200).json({message:'Subject updated successfully',subject:subject})
+
+}
+module.exports={handleAddSubject,handlegetAllSubjects,handleDeleteSubject,handleupdatesubject}
