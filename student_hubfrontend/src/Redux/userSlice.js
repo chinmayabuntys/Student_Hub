@@ -4,8 +4,7 @@ const initialState = {
   name: "",
   email: "",
   age: "",
-  role: "",
-  token: localStorage.getItem("token") || null,
+  role: ""
 };
 
 const userSlice = createSlice({
@@ -14,7 +13,12 @@ const userSlice = createSlice({
   reducers: {
 
     updateUsers: (state, action) => {
-      return { ...state, ...action.payload };
+     
+        state.name=action.payload.name,
+        state.email= action.payload.email,
+        state.age= action.payload.age,
+        state.role= action.payload.role
+    
     },
 
     clearUser: () => {
@@ -22,8 +26,7 @@ const userSlice = createSlice({
         name: "",
         email: "",
         age: "",
-        role: "",
-        token: null
+        role: ""
       };
     }
 

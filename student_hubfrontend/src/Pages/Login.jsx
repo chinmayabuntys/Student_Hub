@@ -28,7 +28,13 @@ function Login() {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", role);
       toast.success(res.data.message);
+      
+      if (role === "trainer") {
+      navigate("/allstudents");
+    } else {
       navigate("/profile");
+    }
+
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
     }

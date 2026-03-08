@@ -9,6 +9,6 @@ const trainerrouter = express.Router();
 trainerrouter.post('/signup', handleSignup);
 trainerrouter.post('/login', handleLogin);
 trainerrouter.get('/details',isAuth,getTrainerDetails);
-trainerrouter.get('/students',isAuth,authorized,getAllStudents);
+trainerrouter.get('/allstudents',isAuth,authorized,getAllStudents);
 module.exports = trainerrouter;
 

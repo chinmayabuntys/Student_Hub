@@ -9,10 +9,14 @@ function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { name, token } = useSelector((state) => state.user);
+  const { name } = useSelector((state) => state.user);
 
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("user");
+ 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     dispatch(clearUser());
     toast.success("Logout Successful");
     navigate("/login");
@@ -31,6 +35,8 @@ function Navbar() {
 
             <Link to="/profile">Profile</Link>
             <Link to="/subjects">Subjects</Link>
+
+            {role === "trainer" && ( <Link to="/allstudents">All Students</Link> )}
 
             <button onClick={handleLogout} className="logout-btn">
               Logout
